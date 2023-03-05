@@ -24,17 +24,15 @@ services:
       context: ./ldap
     hostname: ldap
     environment:
-      LDAP_ADMIN_PASSWORD_FILE: /run/secrets/ldap-admin-password
+      LDAP_ADMIN_PASSWORD: ${LDAP_ADMIN_PASSWORD:-admin}
       LDAP_TLS: true
-      LDAP_TLS_CRT_FILENAME: ldap.crt 
+      LDAP_TLS_CRT_FILENAME: ldap.crt
       LDAP_TLS_KEY_FILENAME: ldap.key
       LDAP_TLS_CA_CRT_FILENAME: ca-bundle.crt
       LDAP_TLS_VERIFY_CLIENT: try
     volumes:
       - ldap-data:/var/lib/ldap
       - ldap-conf:/etc/ldap/slapd.d
-    secrets:
-      - ldap-admin-password
   ldap-admin:
     build:
       context: ./ldap-admin
@@ -68,7 +66,7 @@ services:
       - --hostname-strict-backchannel=true
       - --https-port=6443
       - --spi-truststore-file-file=/run/secrets/truststore.jks
-      - --spi-truststore-file-password=${KEYCLOAK_TRUSTSTORE_PASSWORD:-truststore}
+      - --spi-truststore-file-password=${KEYCLOAK_TRUSTSTORE_PASSWORD}
       - --spi-truststore-file-hostname-verification-policy=WILDCARD
       - --spi-truststore-file-type=pkcs12
       - --db=postgres
@@ -98,8 +96,6 @@ volumes:
   ldap-conf:
 
 secrets:
-  ldap-admin-password:
-    file: ./secrets/ldap/admin-password
   keycloak.crt:
     file: ./secrets/keycloak/keycloak.crt
   keycloak.key:
