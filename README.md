@@ -65,7 +65,7 @@ openjdk version "17.0.6" 2023-01-17
 OpenJDK Runtime Environment (build 17.0.6+10-Ubuntu-0ubuntu122.04)
 OpenJDK 64-Bit Server VM (build 17.0.6+10-Ubuntu-0ubuntu122.04, mixed mode, sharing)
 
-$ step --version
+$ step version
 Smallstep CLI/0.23.2 (linux/amd64)
 Release Date: 2023-02-07T00:53:54Z
 
