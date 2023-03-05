@@ -1,0 +1,110 @@
+services:
+  db:
+    build:
+      context: ./db
+    hostname: db
+    command:
+      - --ssl=on
+      - --ssl_cert_file=/var/lib/postgresql/certs/db.crt
+      - --ssl_key_file=/var/lib/postgresql/certs/db.key
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-homelab}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER}
+      interval: 10s
+      timeout: 30s
+      retries: 3
+      start_period: 5s
+  ldap:
+    build:
+      context: ./ldap
+    hostname: ldap
+    environment:
+      LDAP_ADMIN_PASSWORD_FILE: /run/secrets/ldap-admin-password
+      LDAP_TLS: true
+      LDAP_TLS_CRT_FILENAME: ldap.crt 
+      LDAP_TLS_KEY_FILENAME: ldap.key
+      LDAP_TLS_CA_CRT_FILENAME: ca-bundle.crt
+      LDAP_TLS_VERIFY_CLIENT: try
+    volumes:
+      - ldap-data:/var/lib/ldap
+      - ldap-conf:/etc/ldap/slapd.d
+    secrets:
+      - ldap-admin-password
+  ldap-admin:
+    build:
+      context: ./ldap-admin
+    hostname: ldap-admin
+    ports:
+      - 127.0.0.1:5443:443
+    environment:
+      PHPLDAPADMIN_HTTPS: true
+      PHPLDAPADMIN_HTTPS_CRT_FILENAME: ldap-admin.crt
+      PHPLDAPADMIN_HTTPS_KEY_FILENAME: ldap-admin.key
+      PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME: ca-bundle.crt
+      PHPLDAPADMIN_LDAP_CLIENT_TLS: true
+      PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT: demand
+      PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME: ca-bundle.crt
+      PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME: ldap-admin-client.crt
+      PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME: ldap-admin-client.key
+      PHPLDAPADMIN_LDAP_HOSTS: "#PYTHON2BASH:[{'ldap': [{'server': [{'tls': True}]}]}]"
+    depends_on:
+      ldap:
+        condition: service_started
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.0.1
+    hostname: keycloak
+    ports:
+      - 127.0.0.1:6443:6443
+    command:
+      - start
+      - --https-certificate-file=/run/secrets/keycloak.crt
+      - --https-certificate-key-file=/run/secrets/keycloak.key
+      - --hostname=localhost
+      - --hostname-strict-backchannel=true
+      - --https-port=6443
+      - --spi-truststore-file-file=/run/secrets/truststore.jks
+      - --spi-truststore-file-password=${KEYCLOAK_TRUSTSTORE_PASSWORD:-truststore}
+      - --spi-truststore-file-hostname-verification-policy=WILDCARD
+      - --spi-truststore-file-type=pkcs12
+      - --db=postgres
+      - --db-url-host=db
+      - --db-url-port=5432
+      - --db-url-database=keycloak
+      - --db-url-properties=?ssl,sslmode=verify-full,sslcert=/run/secrets/ca-bundle.crt
+      - --db-username=${POSTGRES_USER:-postgres}
+      - --db-password=${POSTGRES_PASSWORD:-postgres}
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+    secrets:
+      - keycloak.crt
+      - keycloak.key
+      - truststore.jks
+      - ca-bundle.crt
+    depends_on:
+      ldap:
+        condition: service_started
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  ldap-data:
+  ldap-conf:
+
+secrets:
+  ldap-admin-password:
+    file: ./secrets/ldap/admin-password
+  keycloak.crt:
+    file: ./secrets/keycloak/keycloak.crt
+  keycloak.key:
+    file: ./secrets/keycloak/keycloak.key
+  truststore.jks:
+    file: ./secrets/keycloak/truststore.jks
+  ca-bundler.crt:
+    file: ./secrets/keycloak/ca-bundle.crt
