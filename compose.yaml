@@ -29,7 +29,7 @@ services:
       LDAP_TLS_CRT_FILENAME: ldap.crt
       LDAP_TLS_KEY_FILENAME: ldap.key
       LDAP_TLS_CA_CRT_FILENAME: ca-bundle.crt
-      LDAP_TLS_VERIFY_CLIENT: try
+      LDAP_TLS_VERIFY_CLIENT: demand
     volumes:
       - ldap-data:/var/lib/ldap
       - ldap-conf:/etc/ldap/slapd.d
@@ -47,14 +47,14 @@ services:
       PHPLDAPADMIN_LDAP_CLIENT_TLS: true
       PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT: demand
       PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME: ca-bundle.crt
-      PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME: ldap-admin-client.crt
-      PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME: ldap-admin-client.key
+      PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME: ldap-client.crt
+      PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME: ldap-client.key
       PHPLDAPADMIN_LDAP_HOSTS: "#PYTHON2BASH:[{'ldap': [{'server': [{'tls': True}]}]}]"
     depends_on:
       ldap:
         condition: service_started
   keycloak:
-    image: quay.io/keycloak/keycloak:21.0.1
+    image: quay.io/keycloak/keycloak:21.1.1
     hostname: keycloak
     ports:
       - 127.0.0.1:6443:6443

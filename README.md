@@ -81,9 +81,9 @@ $ mv ldap.{crt,key} ldap/certs/
 $ cp ca-bundle.crt ldap/certs/
 
 $ step ca certificate --san=ldap-admin --san=localhost --san=127.0.0.1 ldap-admin ldap-admin.crt ldap-admin.key
-$ step ca certificate --san=localhost --san=127.0.0.1 ldap-admin-client ldap-admin-client.crt ldap-admin-client.key
+$ step ca certificate --san=ldap-admin --san=localhost --san=127.0.0.1 ldap-admin ldap-client.crt ldap-client.key
 $ mv ldap-admin.{crt,key} ldap-admin/https-certs/
-$ mv ldap-admin-client.{crt,key} ldap-admin/ldap-certs/
+$ mv ldap-client.{crt,key} ldap-admin/ldap-certs/
 $ cp ca-bundle.crt ldap-admin/https-certs/
 $ cp ca-bundle.crt ldap-admin/ldap-certs/
 
