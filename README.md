@@ -92,6 +92,10 @@ $ source .env
 $ keytool -importcert -alias intermediate -file $(step path)/certs/intermediate_ca.crt -keystore truststore.jks -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} -storetype pkcs12
 $ keytool -importcert -alias root -file $(step path)/certs/root_ca.crt -keystore truststore.jks -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} -storetype pkcs12
 
+$ step ca certificate --san=gitea --san=localhost --san=127.0.0.1 gitea gitea.crt gitea.key
+$ mv gitea.{crt,key} gitea/certs
+$ cp ~/.step/certs/root_ca gitea/certs/ca.crt
+
 $ mkdir -pv secrets/keycloak
 $ mv keycloak.{crt,key} secrets/keycloak/
 $ mv truststore.jks secrets/keycloak/
