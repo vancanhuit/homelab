@@ -66,8 +66,7 @@ $ cp .env.sample .env
 # Internal PKI
 $ step ca init
 $ step certificate install $(step path)/certs/root_ca.crt
-$ cat $(step path)/certs/intermediate_ca.crt > ca-bundle.crt
-$ cat $(step path)/certs/root_ca.crt >> ca-bundle.crt
+$ cat $(step path)/certs/root_ca.crt > ca.crt
 # Adjust certificate lifetimes before starting:
 # https://smallstep.com/docs/step-ca/basic-certificate-authority-operations/#adjust-certificate-lifetimes
 $ step-ca $(step path)/config/ca.json
@@ -78,19 +77,18 @@ $ mv db.{crt,key} db/certs/
 
 $ step ca certificate --san=ldap --san=localhost --san=127.0.0.1 ldap ldap.crt ldap.key
 $ mv ldap.{crt,key} ldap/certs/
-$ cp ca-bundle.crt ldap/certs/
+$ cp ca.crt ldap/certs/
 
 $ step ca certificate --san=ldap-admin --san=localhost --san=127.0.0.1 ldap-admin ldap-admin.crt ldap-admin.key
 $ step ca certificate --san=ldap-admin --san=localhost --san=127.0.0.1 ldap-admin ldap-client.crt ldap-client.key
 $ mv ldap-admin.{crt,key} ldap-admin/https-certs/
 $ mv ldap-client.{crt,key} ldap-admin/ldap-certs/
-$ cp ca-bundle.crt ldap-admin/https-certs/
-$ cp ca-bundle.crt ldap-admin/ldap-certs/
+$ cp ca.crt ldap-admin/https-certs/
+$ cp ca.crt ldap-admin/ldap-certs/
 
 $ step ca certificate --san=keycloak --san=localhost --san=127.0.0.1 keycloak keycloak.crt keycloak.key
 $ source .env
-$ keytool -importcert -alias intermediate -file $(step path)/certs/intermediate_ca.crt -keystore truststore.jks -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} -storetype pkcs12
-$ keytool -importcert -alias root -file $(step path)/certs/root_ca.crt -keystore truststore.jks -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} -storetype pkcs12
+$ keytool -importcert -alias ca -file $(step path)/certs/root_ca.crt -keystore truststore.jks -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} -storetype pkcs12
 
 $ step ca certificate --san=gitea --san=localhost --san=127.0.0.1 gitea gitea.crt gitea.key
 $ mv gitea.{crt,key} gitea/certs
@@ -99,7 +97,7 @@ $ cp ~/.step/certs/root_ca gitea/certs/ca.crt
 $ mkdir -pv secrets/keycloak
 $ mv keycloak.{crt,key} secrets/keycloak/
 $ mv truststore.jks secrets/keycloak/
-$ cp ca-bundle.crt secrets/keycloak/
+$ cp ca.crt secrets/keycloak/
 ```
 
 ```sh

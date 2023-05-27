@@ -28,7 +28,7 @@ services:
       LDAP_TLS: true
       LDAP_TLS_CRT_FILENAME: ldap.crt
       LDAP_TLS_KEY_FILENAME: ldap.key
-      LDAP_TLS_CA_CRT_FILENAME: ca-bundle.crt
+      LDAP_TLS_CA_CRT_FILENAME: ca.crt
       LDAP_TLS_VERIFY_CLIENT: try
     volumes:
       - ldap-data:/var/lib/ldap
@@ -43,10 +43,10 @@ services:
       PHPLDAPADMIN_HTTPS: true
       PHPLDAPADMIN_HTTPS_CRT_FILENAME: ldap-admin.crt
       PHPLDAPADMIN_HTTPS_KEY_FILENAME: ldap-admin.key
-      PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME: ca-bundle.crt
+      PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME: ca.crt
       PHPLDAPADMIN_LDAP_CLIENT_TLS: true
       PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT: demand
-      PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME: ca-bundle.crt
+      PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME: ca.crt
       PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME: ldap-client.crt
       PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME: ldap-client.key
       PHPLDAPADMIN_LDAP_HOSTS: "#PYTHON2BASH:[{'ldap': [{'server': [{'tls': True}]}]}]"
@@ -73,7 +73,7 @@ services:
       - --db-url-host=db
       - --db-url-port=5432
       - --db-url-database=keycloak
-      - --db-url-properties=?ssl,sslmode=verify-full,sslcert=/run/secrets/ca-bundle.crt
+      - --db-url-properties=?ssl,sslmode=verify-full,sslcert=/run/secrets/ca.crt
       - --db-username=${POSTGRES_USER}
       - --db-password=${POSTGRES_PASSWORD}
     environment:
@@ -83,7 +83,7 @@ services:
       - keycloak.crt
       - keycloak.key
       - truststore.jks
-      - ca-bundle.crt
+      - ca.crt
     depends_on:
       ldap:
         condition: service_started
@@ -132,5 +132,5 @@ secrets:
     file: ./secrets/keycloak/keycloak.key
   truststore.jks:
     file: ./secrets/keycloak/truststore.jks
-  ca-bundle.crt:
-    file: ./secrets/keycloak/ca-bundle.crt
+  ca.crt:
+    file: ./secrets/keycloak/ca.crt
