@@ -92,6 +92,7 @@ $ source .env
 $ keytool -importcert -alias intermediate -file $(step path)/certs/intermediate_ca.crt -keystore truststore.jks -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} -storetype pkcs12
 $ keytool -importcert -alias root -file $(step path)/certs/root_ca.crt -keystore truststore.jks -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} -storetype pkcs12
 
+$ mkdir -pv secrets/keycloak
 $ mv keycloak.{crt,key} secrets/keycloak/
 $ mv truststore.jks secrets/keycloak/
 $ cp ca-bundle.crt secrets/keycloak/
