@@ -72,32 +72,54 @@ $ cat $(step path)/certs/root_ca.crt > ca.crt
 $ step-ca $(step path)/config/ca.json
 
 # Generate TLS certificates
-$ step ca certificate --san=db --san=localhost --san=127.0.0.1 db db.crt db.key
+$ step ca certificate \
+            --san=db \
+            --san=localhost \
+            --san=127.0.0.1 db db.crt db.key
 $ mv db.{crt,key} db/certs/
 
-$ step ca certificate --san=ldap --san=localhost --san=127.0.0.1 ldap ldap.crt ldap.key
+$ step ca certificate \
+            --san=ldap \
+            --san=localhost \
+            --san=127.0.0.1 ldap ldap.crt ldap.key
 $ mv ldap.{crt,key} ldap/certs/
 $ cp ca.crt ldap/certs/
 
-$ step ca certificate --san=ldap-admin --san=localhost --san=127.0.0.1 ldap-admin ldap-admin.crt ldap-admin.key
-$ step ca certificate --san=ldap-admin --san=localhost --san=127.0.0.1 ldap-admin ldap-client.crt ldap-client.key
+$ step ca certificate \
+            --san=ldap-admin \
+            --san=localhost \
+            --san=127.0.0.1 ldap-admin ldap-admin.crt ldap-admin.key
+$ step ca certificate \
+            --san=ldap-admin \
+            --san=localhost \
+            --san=127.0.0.1 ldap-admin ldap-client.crt ldap-client.key
 $ mv ldap-admin.{crt,key} ldap-admin/https-certs/
 $ mv ldap-client.{crt,key} ldap-admin/ldap-certs/
 $ cp ca.crt ldap-admin/https-certs/
 $ cp ca.crt ldap-admin/ldap-certs/
 
 $ source .env
-$ step ca certificate --san=keycloak --san=localhost --san=127.0.0.1 --san=${HOST_IP} keycloak keycloak.crt keycloak.key
-$ keytool -importcert -alias ca -file $(step path)/certs/root_ca.crt -keystore truststore.jks -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} -storetype pkcs12
-
-$ step ca certificate --san=gitea --san=localhost --san=127.0.0.1 --san=${HOST_IP} gitea gitea.crt gitea.key
-$ mv gitea.{crt,key} gitea/certs
-$ cp ~/.step/certs/root_ca gitea/certs/ca.crt
-
+$ step ca certificate \
+          --san=keycloak \
+          --san=localhost \
+          --san=127.0.0.1 \
+          --san=${HOST_IP} keycloak keycloak.crt keycloak.key
+$ keytool -importcert -alias ca -file $(step path)/certs/root_ca.crt \
+          -keystore truststore.jks \
+          -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} \
+          -storetype pkcs12
 $ mkdir -pv secrets/keycloak
 $ mv keycloak.{crt,key} secrets/keycloak/
 $ mv truststore.jks secrets/keycloak/
-$ cp ca.crt secrets/keycloak/
+$ cp ca.crt secrets/
+
+$ step ca certificate \
+          --san=gitea \
+          --san=localhost \
+          --san=127.0.0.1 \
+          --san=${HOST_IP} gitea gitea.crt gitea.key
+$ mv gitea.{crt,key} gitea/certs
+$ cp ~/.step/certs/root_ca gitea/certs/ca.crt
 ```
 
 ```sh

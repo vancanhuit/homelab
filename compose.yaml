@@ -3,12 +3,12 @@ services:
     build:
       context: ./db
     hostname: db
+    expose:
+      - 5432
     command:
       - --ssl=on
       - --ssl_cert_file=/var/lib/postgresql/certs/db.crt
       - --ssl_key_file=/var/lib/postgresql/certs/db.key
-    expose:
-      - 5432
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -21,6 +21,7 @@ services:
       timeout: 30s
       retries: 3
       start_period: 5s
+
   ldap:
     build:
       context: ./ldap
@@ -40,6 +41,7 @@ services:
     volumes:
       - ldap-data:/var/lib/ldap
       - ldap-conf:/etc/ldap/slapd.d
+
   ldap-admin:
     build:
       context: ./ldap-admin
@@ -60,6 +62,7 @@ services:
     depends_on:
       ldap:
         condition: service_started
+
   keycloak:
     image: quay.io/keycloak/keycloak:21.1.1
     hostname: keycloak
@@ -86,6 +89,9 @@ services:
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     secrets:
       - keycloak.crt
       - keycloak.key
@@ -101,6 +107,9 @@ services:
     build:
       context: ./gitea
     hostname: gitea
+    ports:
+      - ${HOST_IP}:3443:3443
+      - 127.0.0.1:2222:22
     environment:
       GITEA__database__DB_TYPE: postgres
       GITEA__database__HOST: db:5432
@@ -119,9 +128,6 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - gitea:/data
-    ports:
-      - ${HOST_IP}:3443:3443
-      - 127.0.0.1:2222:22
     depends_on:
       db:
         condition: service_healthy
@@ -142,4 +148,5 @@ secrets:
   truststore.jks:
     file: ./secrets/keycloak/truststore.jks
   ca.crt:
-    file: ./secrets/keycloak/ca.crt
+    file: ./secrets/ca.crt
+
