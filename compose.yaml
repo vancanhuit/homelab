@@ -24,6 +24,8 @@ services:
       context: ./ldap
     hostname: ldap
     environment:
+      LDAP_ORGANISATION: Homelab
+      LDAP_DOMAIN: home.lab
       LDAP_ADMIN_PASSWORD: ${LDAP_ADMIN_PASSWORD}
       LDAP_TLS: true
       LDAP_TLS_CRT_FILENAME: ldap.crt
