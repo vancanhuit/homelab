@@ -86,11 +86,11 @@ $ mv ldap-client.{crt,key} ldap-admin/ldap-certs/
 $ cp ca.crt ldap-admin/https-certs/
 $ cp ca.crt ldap-admin/ldap-certs/
 
-$ step ca certificate --san=keycloak --san=localhost --san=127.0.0.1 keycloak keycloak.crt keycloak.key
 $ source .env
+$ step ca certificate --san=keycloak --san=localhost --san=127.0.0.1 --san=${HOST_IP} keycloak keycloak.crt keycloak.key
 $ keytool -importcert -alias ca -file $(step path)/certs/root_ca.crt -keystore truststore.jks -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} -storetype pkcs12
 
-$ step ca certificate --san=gitea --san=localhost --san=127.0.0.1 gitea gitea.crt gitea.key
+$ step ca certificate --san=gitea --san=localhost --san=127.0.0.1 --san=${HOST_IP} gitea gitea.crt gitea.key
 $ mv gitea.{crt,key} gitea/certs
 $ cp ~/.step/certs/root_ca gitea/certs/ca.crt
 
