@@ -119,7 +119,7 @@ $ step ca certificate \
           --san=127.0.0.1 \
           --san=${HOST_IP} gitea gitea.crt gitea.key
 $ mv gitea.{crt,key} gitea/certs
-$ cp ~/.step/certs/root_ca gitea/certs/ca.crt
+$ cp ca.crt gitea/certs/ca.crt
 ```
 
 ```sh
