@@ -12,9 +12,8 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     healthcheck:
       test: pg_isready -U ${POSTGRES_USER}
       interval: 10s
@@ -47,7 +46,7 @@ services:
       context: ./ldap-admin
     hostname: ldap-admin
     ports:
-      - 127.0.0.1:5443:443
+      - 127.0.0.1:1443:443
     environment:
       PHPLDAPADMIN_HTTPS: true
       PHPLDAPADMIN_HTTPS_CRT_FILENAME: ldap-admin.crt
@@ -67,14 +66,14 @@ services:
     image: quay.io/keycloak/keycloak:21.1.1
     hostname: keycloak
     ports:
-      - ${HOST_IP}:6443:6443
+      - ${HOST_IP}:2443:2443
     command:
       - start
       - --https-certificate-file=/run/secrets/keycloak.crt
       - --https-certificate-key-file=/run/secrets/keycloak.key
       - --hostname=${HOST_IP}
       - --hostname-strict-backchannel=true
-      - --https-port=6443
+      - --https-port=2443
       - --spi-truststore-file-file=/run/secrets/truststore.jks
       - --spi-truststore-file-password=${KEYCLOAK_TRUSTSTORE_PASSWORD}
       - --spi-truststore-file-hostname-verification-policy=WILDCARD
@@ -122,12 +121,11 @@ services:
       GITEA__server__PROTOCOL: https
       GITEA__server__DOMAIN: ${HOST_IP}
       GITEA__server__HTTP_PORT: 3443
-      GITEA__server__ROOT_URL: https://${HOST_IP}:3443
       GITEA__service__DISABLE_REGISTRATION: true
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - gitea:/data
+      - gitea-data:/data
     depends_on:
       db:
         condition: service_healthy
@@ -135,10 +133,10 @@ services:
         condition: service_started
 
 volumes:
-  pgdata:
+  db-data:
   ldap-data:
   ldap-conf:
-  gitea:
+  gitea-data:
 
 secrets:
   keycloak.crt:
