@@ -7,6 +7,8 @@
 - [PHPLDAPAdmin](https://github.com/osixia/docker-phpLDAPadmin).
 - [Keycloak](https://www.keycloak.org/).
 - [PostgreSQL](https://hub.docker.com/_/postgres).
+- [Jenkins](https://jenkins.io).
+- [Gitea](https://gitea.io).
 
 ```sh
 $ docker version
@@ -66,7 +68,7 @@ $ cp .env.sample .env
 # Internal PKI
 $ step ca init
 $ step certificate install $(step path)/certs/root_ca.crt
-$ cat $(step path)/certs/root_ca.crt > ca.crt
+$ cp $(step path)/certs/root_ca.crt ca.crt
 # Adjust certificate lifetimes before starting:
 # https://smallstep.com/docs/step-ca/basic-certificate-authority-operations/#adjust-certificate-lifetimes
 $ step-ca $(step path)/config/ca.json
