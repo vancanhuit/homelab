@@ -130,6 +130,7 @@ $ step ca certificate \
           --san=${HOST_IP} jenkins jenkins.crt jenkins.key
 $ openssl pkcs12 -export -in jenkins.crt -inkey jenkins.key -out jenkins.p12 -password pass:${JENKINS_KEYSTORE_PASSWORD}
 $ keytool -importkeystore -srckeystore jenkins.p12 -srcstorepass ${JENKINS_KEYSTORE_PASSWORD} -destkeystore jenkins.jks -deststorepass ${JENKINS_KEYSTORE_PASSWORD}
+$ cp ca.crt jenkins/certs/
 $ mv jenkins.jks jenkins/certs/
 ```
 
