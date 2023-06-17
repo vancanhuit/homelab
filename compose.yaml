@@ -3,6 +3,7 @@ services:
     build:
       context: ./db
     hostname: db
+    restart: on-failure
     expose:
       - 5432
     command:
@@ -25,6 +26,7 @@ services:
     build:
       context: ./ldap
     hostname: ldap
+    restart: on-failure
     expose:
       - 389
       - 636
@@ -64,6 +66,7 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:21.1.1
+    restart: on-failure
     hostname: keycloak
     ports:
       - ${HOST_IP}:2443:2443
@@ -105,6 +108,7 @@ services:
   gitea:
     build:
       context: ./gitea
+    restart: on-failure
     hostname: gitea
     ports:
       - ${HOST_IP}:3443:3443
@@ -132,11 +136,29 @@ services:
       ldap:
         condition: service_started
 
+  jenkins:
+    build:
+      context: ./jenkins/
+    restart: on-failure
+    hostname: jenkins
+    ports:
+      - ${HOST_IP}:5443:5443
+    command:
+      - --httpPort=-1
+      - --httpsPort=5443
+      - --httpsKeyStore=/var/lib/jenkins/jenkins.jks
+      - --httpsKeyStorePassword=${JENKINS_KEYSTORE_PASSWORD}
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - jenkins-data:/var/jenkins_home
+
 volumes:
   db-data:
   ldap-data:
   ldap-conf:
   gitea-data:
+  jenkins-data:
 
 secrets:
   keycloak.crt:

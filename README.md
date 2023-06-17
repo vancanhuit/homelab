@@ -120,6 +120,15 @@ $ step ca certificate \
           --san=${HOST_IP} gitea gitea.crt gitea.key
 $ mv gitea.{crt,key} gitea/certs
 $ cp ca.crt gitea/certs/ca.crt
+
+$ step ca certificate \
+          --san=jenkins \
+          --san=localhost \
+          --san=127.0.0.1 \
+          --san=${HOST_IP} jenkins jenkins.crt jenkins.key
+$ openssl pkcs12 -export -in jenkins.crt -inkey jenkins.key -out jenkins.p12 -password pass:${JENKINS_KEYSTORE_PASSWORD}
+$ keytool -importkeystore -srckeystore jenkins.p12 -srcstorepass ${JENKINS_KEYSTORE_PASSWORD} -destkeystore jenkins.jks -deststorepass ${JENKINS_KEYSTORE_PASSWORD}
+$ mv jenkins.jks jenkins/certs/
 ```
 
 ```sh
