@@ -142,10 +142,10 @@ services:
     restart: on-failure
     hostname: jenkins
     ports:
-      - ${HOST_IP}:5443:5443
+      - ${HOST_IP}:4443:4443
     command:
       - --httpPort=-1
-      - --httpsPort=5443
+      - --httpsPort=4443
       - --httpsKeyStore=/var/lib/jenkins/jenkins.jks
       - --httpsKeyStorePassword=${JENKINS_KEYSTORE_PASSWORD}
     volumes:
