@@ -65,7 +65,7 @@ services:
         condition: service_started
 
   keycloak:
-    image: quay.io/keycloak/keycloak:21.1.1
+    image: quay.io/keycloak/keycloak:21.1.2
     restart: on-failure
     hostname: keycloak
     ports:

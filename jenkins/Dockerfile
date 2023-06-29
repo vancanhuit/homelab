@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.401.1-lts-jdk17
+FROM jenkins/jenkins:2.401.2-lts-jdk17
 
 USER root
 COPY certs/ca.crt /
