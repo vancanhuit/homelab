@@ -77,7 +77,7 @@ services:
       - --hostname=${HOST_IP}
       - --hostname-strict-backchannel=true
       - --https-port=2443
-      - --spi-truststore-file-file=/run/secrets/truststore.jks
+      - --spi-truststore-file-file=/run/secrets/keycloak.jks
       - --spi-truststore-file-password=${KEYCLOAK_TRUSTSTORE_PASSWORD}
       - --spi-truststore-file-hostname-verification-policy=WILDCARD
       - --spi-truststore-file-type=pkcs12
@@ -97,8 +97,7 @@ services:
     secrets:
       - keycloak.crt
       - keycloak.key
-      - truststore.jks
-      - ca.crt
+      - keycloak.jks
     depends_on:
       ldap:
         condition: service_started
@@ -165,5 +164,5 @@ secrets:
     file: ./secrets/keycloak/keycloak.crt
   keycloak.key:
     file: ./secrets/keycloak/keycloak.key
-  truststore.jks:
-    file: ./secrets/keycloak/truststore.jks
+  keycloak.jks:
+    file: ./secrets/keycloak/keycloak.jks

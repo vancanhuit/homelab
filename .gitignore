@@ -2,5 +2,4 @@
 secrets/
 *.crt
 *.key
-*.pass
 *.p12

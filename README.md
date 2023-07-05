@@ -66,7 +66,8 @@ $ git clone https://github.com/vancanhuit/homelab.git
 $ cd homelab
 
 $ echo $(tr -dc A-Za-z0-9 < /dev/urandom | head -c 32 | xargs) > ca.pass
-$ ./set-vars.sh | tee .env
+# Change wlp3s0 to an appropriate network interface name on each machine
+$ ./set-vars.sh wlp3s0 | tee .env
 $ export $(cat .env | xargs)
 
 # Internal PKI
