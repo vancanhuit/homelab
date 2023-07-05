@@ -85,7 +85,7 @@ services:
       - --db-url-host=db
       - --db-url-port=5432
       - --db-url-database=keycloak
-      - --db-url-properties=?ssl,sslmode=verify-full,sslcert=/run/secrets/ca.crt
+      - --db-url-properties=?ssl,sslmode=verify-full
       - --db-username=${POSTGRES_USER}
       - --db-password=${POSTGRES_PASSWORD}
     environment:
@@ -167,6 +167,3 @@ secrets:
     file: ./secrets/keycloak/keycloak.key
   truststore.jks:
     file: ./secrets/keycloak/truststore.jks
-  ca.crt:
-    file: ./secrets/ca.crt
-

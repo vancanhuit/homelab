@@ -64,75 +64,25 @@ Release Date: 2023-02-02T23:10:54Z
 ```sh
 $ git clone https://github.com/vancanhuit/homelab.git
 $ cd homelab
-# Add or modify env vars
-$ cp .env.sample .env
+
+$ echo $(tr -dc A-Za-z0-9 < /dev/urandom | head -c 32 | xargs) > ca.pass
+$ ./set-vars.sh | tee .env
+$ export $(cat .env | xargs)
 
 # Internal PKI
-$ step ca init
-$ step certificate install $(step path)/certs/root_ca.crt
+$ step ca init --name Homelab \
+               --deployment-type standalone \
+               --provisioner ca@home.lab \
+               --dns ${HOST_IP} \
+               --address :10443 \
+               --password-file ./ca.pass
+$ sudo step certificate install $(step path)/certs/root_ca.crt
 # Adjust certificate lifetimes before starting:
 # https://smallstep.com/docs/step-ca/basic-certificate-authority-operations/#adjust-certificate-lifetimes
-$ step-ca $(step path)/config/ca.json
+$ step-ca $(step path)/config/ca.json --password-file ./ca.pass
 
 # Generate TLS certificates
-$ step ca certificate \
-            --san=db \
-            --san=localhost \
-            --san=127.0.0.1 db db.crt db.key
-$ mv db.{crt,key} db/certs/
-
-$ step ca certificate \
-            --san=ldap \
-            --san=localhost \
-            --san=127.0.0.1 ldap ldap.crt ldap.key
-$ mv ldap.{crt,key} ldap/certs/
-$ cp $(step path)/certs/root_ca.crt ldap/certs/ca.crt
-
-$ step ca certificate \
-            --san=ldap-admin \
-            --san=localhost \
-            --san=127.0.0.1 ldap-admin ldap-admin.crt ldap-admin.key
-$ step ca certificate \
-            --san=ldap-admin \
-            --san=localhost \
-            --san=127.0.0.1 ldap-admin ldap-client.crt ldap-client.key
-$ mv ldap-admin.{crt,key} ldap-admin/https-certs/
-$ mv ldap-client.{crt,key} ldap-admin/ldap-certs/
-$ cp $(step path)/certs/root_ca.crt ldap-admin/https-certs/ca.crt
-$ cp $(step path)/certs/root_ca.crt ldap-admin/ldap-certs/ca.crt
-
-$ source .env
-$ step ca certificate \
-          --san=keycloak \
-          --san=localhost \
-          --san=127.0.0.1 \
-          --san=${HOST_IP} keycloak keycloak.crt keycloak.key
-$ keytool -importcert -alias ca -file $(step path)/certs/root_ca.crt \
-          -keystore truststore.jks \
-          -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} \
-          -storetype pkcs12
-$ mkdir -pv secrets/keycloak
-$ mv keycloak.{crt,key} secrets/keycloak/
-$ mv truststore.jks secrets/keycloak/
-$ cp $(step path)/certs/root_ca.crt secrets/ca.crt
-
-$ step ca certificate \
-          --san=gitea \
-          --san=localhost \
-          --san=127.0.0.1 \
-          --san=${HOST_IP} gitea gitea.crt gitea.key
-$ mv gitea.{crt,key} gitea/certs
-$ cp $(step path)/certs/root_ca.crt gitea/certs/ca.crt
-
-$ step ca certificate \
-          --san=jenkins \
-          --san=localhost \
-          --san=127.0.0.1 \
-          --san=${HOST_IP} jenkins jenkins.crt jenkins.key
-$ openssl pkcs12 -export -in jenkins.crt -inkey jenkins.key -out jenkins.p12 -password pass:${JENKINS_KEYSTORE_PASSWORD}
-$ keytool -importkeystore -srckeystore jenkins.p12 -srcstorepass ${JENKINS_KEYSTORE_PASSWORD} -destkeystore jenkins.jks -deststorepass ${JENKINS_KEYSTORE_PASSWORD}
-$ cp $(step path)/certs/root_ca.crt jenkins/certs/ca.crt
-$ mv jenkins.jks jenkins/certs/
+$ PASSWORD_FILE=./ca.pass ./gen-tls-certs.sh
 ```
 
 ```sh
