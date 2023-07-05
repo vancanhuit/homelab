@@ -44,10 +44,10 @@ step ca certificate \
           --san=${HOST_IP} keycloak keycloak.crt keycloak.key \
           --password-file ${PASSWORD_FILE}
 keytool -importcert -alias ca -file $(step path)/certs/root_ca.crt \
-          -keystore truststore.jks \
-          -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} \
-          -storetype pkcs12 \
-          -noprompt -trustcacerts
+        -keystore truststore.jks \
+        -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} \
+        -storetype pkcs12 \
+        -noprompt -trustcacerts
 mkdir -pv secrets/keycloak
 mv -v keycloak.{crt,key} secrets/keycloak/
 mv -v truststore.jks secrets/keycloak/
