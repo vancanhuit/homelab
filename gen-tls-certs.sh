@@ -45,7 +45,6 @@ set -e
     cp -v $(step path)/certs/root_ca.crt ldap-admin/ldap-certs/ca.crt
 }
 
-mkdir -pv secrets/keycloak
 [[ -e secrets/keycloak/keycloak.crt ]] || {
      step ca certificate \
           --san=keycloak \
@@ -60,8 +59,8 @@ mkdir -pv secrets/keycloak
             -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} \
             -storetype pkcs12 \
             -noprompt -trustcacerts
-    mv -v keycloak.{crt,key} secrets/keycloak/
-    mv -v keycloak.jks secrets/keycloak/
+    mv -v keycloak.{crt,key} secrets/
+    mv -v keycloak.jks secrets/
 }
 
 [[ -e gitea/certs/gitea.crt ]] || {

@@ -161,8 +161,8 @@ volumes:
 
 secrets:
   keycloak.crt:
-    file: ./secrets/keycloak/keycloak.crt
+    file: ./secrets/keycloak.crt
   keycloak.key:
-    file: ./secrets/keycloak/keycloak.key
+    file: ./secrets/keycloak.key
   keycloak.jks:
-    file: ./secrets/keycloak/keycloak.jks
+    file: ./secrets/keycloak.jks
