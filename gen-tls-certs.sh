@@ -54,7 +54,7 @@ set -e
           --password-file ${PASSWORD_FILE}
 }
 [[ -e secrets/keycloak/keycloak.jks ]] || {
-    keytool -importcert -alias ca -file $(step path)/certs/root_ca.crt \
+    keytool -importcert -alias homelab-ca -file $(step path)/certs/root_ca.crt \
             -keystore keycloak.jks \
             -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} \
             -storetype pkcs12 \
