@@ -45,7 +45,7 @@ set -e
     cp -v $(step path)/certs/root_ca.crt ldap-admin/ldap-certs/ca.crt
 }
 
-[[ -e secrets/keycloak/keycloak.crt ]] || {
+[[ -e secrets/keycloak.crt ]] || {
      step ca certificate \
           --san=keycloak \
           --san=localhost \
@@ -53,7 +53,7 @@ set -e
           --san=${HOST_IP} keycloak keycloak.crt keycloak.key \
           --password-file ${PASSWORD_FILE}
 }
-[[ -e secrets/keycloak/keycloak.jks ]] || {
+[[ -e secrets/keycloak.jks ]] || {
     keytool -importcert -alias homelab-ca -file $(step path)/certs/root_ca.crt \
             -keystore keycloak.jks \
             -storepass ${KEYCLOAK_TRUSTSTORE_PASSWORD} \
