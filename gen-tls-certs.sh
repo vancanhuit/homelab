@@ -94,3 +94,24 @@ set -e
     cp -v $(step path)/certs/root_ca.crt jenkins/certs/ca.crt
     mv -v jenkins.jks jenkins/certs/
 }
+
+[[ -e gerrit/certs/gerrit.jks ]] || {
+    step ca certificate \
+          --san=gerrit \
+          --san=localhost \
+          --san=127.0.0.1 \
+          --san=${HOST_IP} gerrit gerrit.crt gerrit.key \
+          --password-file ${PASSWORD_FILE}
+    openssl pkcs12 -export \
+                   -in gerrit.crt \
+                   -inkey gerrit.key \
+                   -out gerrit.p12 \
+                   -password pass:${GERRIT_KEYSTORE_PASSWORD}
+    keytool -importkeystore \
+            -srckeystore gerrit.p12 \
+            -srcstorepass ${GERRIT_KEYSTORE_PASSWORD} \
+            -destkeystore gerrit.jks \
+            -deststorepass ${GERRIT_KEYSTORE_PASSWORD}
+    cp -v $(step path)/certs/root_ca.crt gerrit/certs/ca.crt
+    mv -v gerrit.jks gerrit/certs/
+}

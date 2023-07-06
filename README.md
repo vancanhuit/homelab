@@ -1,14 +1,15 @@
 # Simple Home Lab Setup with Docker Compose
 
-- [Docker Engine](https://docs.docker.com/engine/).
-- [Docker Compose](https://docs.docker.com/compose/).
-- [Smallstep CA](https://smallstep.com/docs/step-ca).
-- [OpenLDAP](https://github.com/osixia/docker-openldap).
-- [PHPLDAPAdmin](https://github.com/osixia/docker-phpLDAPadmin).
-- [Keycloak](https://www.keycloak.org/).
-- [PostgreSQL](https://hub.docker.com/_/postgres).
-- [Jenkins](https://jenkins.io).
-- [Gitea](https://gitea.io).
+- [Docker Engine](https://docs.docker.com/engine/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Smallstep CA](https://smallstep.com/docs/step-ca)
+- [OpenLDAP](https://github.com/osixia/docker-openldap)
+- [PHPLDAPAdmin](https://github.com/osixia/docker-phpLDAPadmin)
+- [PostgreSQL](https://hub.docker.com/_/postgres)
+- [Keycloak](https://www.keycloak.org/)
+- [Jenkins](https://jenkins.io)
+- [Gitea](https://gitea.io)
+- [Gerrit](https://www.gerritcodereview.com/)
 
 ```sh
 $ docker version
@@ -84,6 +85,12 @@ $ step-ca $(step path)/config/ca.json --password-file ./ca.pass
 
 # Generate TLS certificates
 $ PASSWORD_FILE=./ca.pass ./gen-tls-certs.sh
+$ cat > gerrit/etc/secure.config << EOF
+[ldap]
+    password = ${LDAP_ADMIN_PASSWORD}
+[httpd]
+    sslKeyPassword = ${GERRIT_KEYSTORE_PASSWORD}
+EOF
 ```
 
 ```sh

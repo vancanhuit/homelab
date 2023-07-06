@@ -152,12 +152,28 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - jenkins-data:/var/jenkins_home
 
+  gerrit:
+    build:
+      context: ./gerrit
+    restart: on-failure
+    hostname: gerrit
+    ports:
+      - ${HOST_IP}:5443:5443
+    environment:
+      CANONICAL_WEB_URL: https://${HOST_IP}:5443
+      HTTPD_LISTEN_URL: https://*:5443/
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - gerrit-data:/var/gerrit
+
 volumes:
   db-data:
   ldap-data:
   ldap-conf:
   gitea-data:
   jenkins-data:
+  gerrit-data:
 
 secrets:
   keycloak.crt:
