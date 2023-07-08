@@ -1,6 +1,7 @@
 FROM gerritcodereview/gerrit:3.8.0
 
 COPY etc/ /var/gerrit/etc/
+COPY lib/ /var/gerrit/lib/
 COPY certs/gerrit.jks /var/gerrit/etc/
 
 USER root

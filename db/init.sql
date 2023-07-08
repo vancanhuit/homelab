@@ -1,2 +1,3 @@
 CREATE DATABASE keycloak;
 CREATE DATABASE gitea;
+CREATE DATABASE gerrit;
