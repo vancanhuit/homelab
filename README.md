@@ -85,6 +85,10 @@ $ step-ca $(step path)/config/ca.json --password-file ./ca.pass
 
 # Generate TLS certificates
 $ PASSWORD_FILE=./ca.pass ./gen-tls-certs.sh
+$ cat >> gerrit/etc/gerrit.config << EOF
+[accountPatchReviewDb]
+    url = jdbc:postgresql://db:5432/gerrit?ssl,sslmode=verify-full&user=${POSTGRES_USER}&password=${POSTGRES_PASSWORD}
+EOF
 $ cat > gerrit/etc/secure.config << EOF
 [ldap]
     password = ${LDAP_ADMIN_PASSWORD}
