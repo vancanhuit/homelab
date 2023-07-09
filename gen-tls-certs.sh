@@ -115,3 +115,13 @@ set -e
     cp -v $(step path)/certs/root_ca.crt gerrit/certs/ca.crt
     mv -v gerrit.jks gerrit/certs/
 }
+
+[[ -e secrets/registry.crt ]] || {
+    step ca certificate \
+          --san=registry \
+          --san=localhost \
+          --san=127.0.0.1 \
+          --san=${HOST_IP} registry registry.crt registry.key \
+          --password-file ${PASSWORD_FILE}
+    mv -v registry.{crt,key} secrets/
+}

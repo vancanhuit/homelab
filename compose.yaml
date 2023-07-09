@@ -167,6 +167,24 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - gerrit-data:/var/gerrit
 
+  registry:
+    image: registry:2
+    restart: always
+    hostname: registry
+    ports:
+      - ${HOST_IP}:7443:7443
+    environment:
+      REGISTRY_HTTP_ADDR: 0.0.0.0:7443
+      REGISTRY_HTTP_TLS_CERTIFICATE: /run/secrets/registry.crt
+      REGISTRY_HTTP_TLS_KEY: /run/secrets/registry.key
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - registry-data:/var/lib/registry
+    secrets:
+      - registry.crt
+      - registry.key
+
 volumes:
   db-data:
   ldap-data:
@@ -174,6 +192,7 @@ volumes:
   gitea-data:
   jenkins-data:
   gerrit-data:
+  registry-data:
 
 secrets:
   keycloak.crt:
@@ -182,3 +201,7 @@ secrets:
     file: ./secrets/keycloak.key
   keycloak.jks:
     file: ./secrets/keycloak.jks
+  registry.crt:
+    file: ./secrets/registry.crt
+  registry.key:
+    file: ./secrets/registry.key
