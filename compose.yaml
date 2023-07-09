@@ -185,6 +185,27 @@ services:
       - registry.crt
       - registry.key
 
+  wiki:
+    image: ghcr.io/requarks/wiki:2
+    restart: always
+    hostname: wiki
+    ports:
+      - ${HOST_IP}:8443:8443
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./wiki/config.yml:/wiki/config.yml
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    secrets:
+      - wiki.pem
+      - wiki-key.pem
+      - ca.crt
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   db-data:
   ldap-data:
@@ -205,3 +226,9 @@ secrets:
     file: ./secrets/registry.crt
   registry.key:
     file: ./secrets/registry.key
+  wiki.pem:
+    file: ./secrets/wiki.pem
+  wiki-key.pem:
+    file: ./secrets/wiki-key.pem
+  ca.crt:
+    file: ./secrets/ca.crt

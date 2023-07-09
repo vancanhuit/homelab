@@ -79,6 +79,8 @@ $ step ca init --name Homelab \
                --address :10443 \
                --password-file ./ca.pass
 $ sudo step certificate install $(step path)/certs/root_ca.crt
+$ mkdir -pv secrets/
+$ cp -v $(step path)/certs/root_ca.crt secrets/ca.crt
 # Adjust certificate lifetimes before starting:
 # https://smallstep.com/docs/step-ca/basic-certificate-authority-operations/#adjust-certificate-lifetimes
 $ step-ca $(step path)/config/ca.json --password-file ./ca.pass

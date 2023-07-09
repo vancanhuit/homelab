@@ -125,3 +125,14 @@ set -e
           --password-file ${PASSWORD_FILE}
     mv -v registry.{crt,key} secrets/
 }
+
+[[ -e secrets/wiki.pem ]] || {
+    step ca certificate \
+          --san=wiki \
+          --san=localhost \
+          --san=127.0.0.1 \
+          --san=${HOST_IP} wiki wiki.pem wiki-key.pem \
+          --password-file ${PASSWORD_FILE}
+    mv -v wiki.pem secrets/
+    mv -v wiki-key.pem secrets/
+}
