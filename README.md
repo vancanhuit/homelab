@@ -10,6 +10,8 @@
 - [Jenkins](https://jenkins.io)
 - [Gitea](https://gitea.io)
 - [Gerrit](https://www.gerritcodereview.com/)
+- [Docker Registry](https://docs.docker.com/registry/deploying/)
+- [Wiki.js](https://js.wiki/)
 
 ```sh
 $ docker version
