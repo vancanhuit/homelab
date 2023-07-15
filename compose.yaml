@@ -125,6 +125,7 @@ services:
       GITEA__server__DOMAIN: ${HOST_IP}
       GITEA__server__HTTP_PORT: 3443
       GITEA__service__DISABLE_REGISTRATION: true
+      GITEA__webhook__ALLOWED_HOST_LIST: private
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
