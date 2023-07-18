@@ -1,4 +1,4 @@
-FROM gitea/gitea:1.19.4
+FROM gitea/gitea:1.20.0
 
 COPY --chown=git:git certs/gitea.crt /data/gitea/
 COPY --chown=git:git certs/gitea.key /data/gitea/
