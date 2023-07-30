@@ -1,4 +1,4 @@
-FROM gerritcodereview/gerrit:3.8.0
+FROM gerritcodereview/gerrit:3.8.1
 
 COPY etc/ /var/gerrit/etc/
 COPY lib/ /var/gerrit/lib/
