@@ -9,5 +9,4 @@ RUN keytool -importcert -alias homelab-ca -file /usr/local/share/ca-certificates
     -keystore $JAVA_HOME/lib/security/cacerts \
     -storepass changeit \
     -noprompt -trustcacerts
-
 USER jenkins

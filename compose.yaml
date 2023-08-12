@@ -3,7 +3,7 @@ services:
     build:
       context: ./db
     hostname: db
-    restart: on-failure
+    restart: always
     expose:
       - 5432
     command:
@@ -26,7 +26,7 @@ services:
     build:
       context: ./ldap
     hostname: ldap
-    restart: on-failure
+    restart: always
     expose:
       - 389
       - 636
@@ -66,7 +66,7 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:22.0.1
-    restart: on-failure
+    restart: always
     hostname: keycloak
     ports:
       - ${HOST_IP}:2443:2443
@@ -107,7 +107,7 @@ services:
   gitea:
     build:
       context: ./gitea
-    restart: on-failure
+    restart: always
     hostname: gitea
     ports:
       - ${HOST_IP}:3443:3443
@@ -138,8 +138,8 @@ services:
 
   jenkins:
     build:
-      context: ./jenkins/
-    restart: on-failure
+      context: ./jenkins
+    restart: always
     hostname: jenkins
     ports:
       - ${HOST_IP}:4443:4443
@@ -156,7 +156,7 @@ services:
   gerrit:
     build:
       context: ./gerrit
-    restart: on-failure
+    restart: always
     hostname: gerrit
     ports:
       - ${HOST_IP}:5443:5443

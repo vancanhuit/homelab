@@ -11,5 +11,4 @@ RUN keytool -importcert -alias homelab-ca -file /ca.crt \
     -storepass changeit \
     -noprompt -trustcacerts && \
     rm -f /ca.crt
-
 USER gerrit

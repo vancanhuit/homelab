@@ -7,6 +7,11 @@ set -e
     exit 1
 }
 
+[[ -n ${HOST_IP} ]] || {
+    echo "Missing HOST_IP"
+    exit 1
+}
+
 [[ -e db/certs/db.crt ]] || {
     step ca certificate \
             --san=db \

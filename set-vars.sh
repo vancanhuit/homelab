@@ -2,8 +2,16 @@
 
 set -e
 
-if=$1
-HOST_IP=$(ip -4 addr show | grep ${if} | grep inet | awk '{print $2}' | cut -d/ -f1)
+IF=$1
+[[ -n ${IF} ]] || {
+    echo "Please specify a network interface."
+    exit 1
+}
+HOST_IP=$(ip -4 addr show | grep ${IF} | grep inet | awk '{print $2}' | cut -d/ -f1)
+[[ -n ${HOST_IP} ]] || {
+    echo "Cannot get IPv4 address from the network interface ${IF}"
+    exit 1
+}
 echo "HOST_IP=${HOST_IP}"
 
 echo "POSTGRES_USER=homelab"
