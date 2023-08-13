@@ -192,6 +192,7 @@ services:
     hostname: wiki
     ports:
       - ${HOST_IP}:8443:8443
+      - ${HOST_IP}:3000:3000
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
