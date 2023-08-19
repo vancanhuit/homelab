@@ -104,3 +104,35 @@ EOF
 ```sh
 $ docker compose up -d --build
 ```
+
+## LDAP users and groups
+
+* Users
+    * Base DN: `ou=users,dc=home,dc=lab`.
+    * Object class: `inetOrgPerson`.
+* Groups:
+    * Base DN: `ou=groups,dc=home,dc=lab`.
+    * Object class: `groupOfUniqueNames`.
+
+## Keycloak - LDAP data mapping
+
+* Users:
+    * First name: `cn`.
+    * Last name: `sn`.
+    * Full name: `displayName`.
+    * Email: `mail`.
+    * Username: `uid`.
+    * Password: `userPassword`.
+* Groups:
+    * Name: `cn`.
+    * Membership LDAP attribute: `uniqueMember`.
+    * Membership attribute type: `dn`.
+    * Membership user LDAP attribute: `uid`.
+
+## Configuring LDAP authentication
+
+* [https://www.keycloak.org/docs/latest/server_admin/#_ldap](https://www.keycloak.org/docs/latest/server_admin/#_ldap).
+* [https://docs.gitea.com/usage/authentication](https://docs.gitea.com/usage/authentication).
+* [https://plugins.jenkins.io/ldap/](https://plugins.jenkins.io/ldap/).
+* [https://docs.requarks.io/auth/ldap](https://docs.requarks.io/auth/ldap).
+* [https://gerrit-review.googlesource.com/Documentation/config-gerrit.html#ldap](https://gerrit-review.googlesource.com/Documentation/config-gerrit.html#ldap).
