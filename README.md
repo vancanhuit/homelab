@@ -136,3 +136,13 @@ $ docker compose up -d --build
 * [https://plugins.jenkins.io/ldap/](https://plugins.jenkins.io/ldap/).
 * [https://docs.requarks.io/auth/ldap](https://docs.requarks.io/auth/ldap).
 * [https://gerrit-review.googlesource.com/Documentation/config-gerrit.html#ldap](https://gerrit-review.googlesource.com/Documentation/config-gerrit.html#ldap).
+
+## Accessing services
+
+* Private root CA certificate can be downloaded via: `https://<HOST_IP>:10443/roots.pem`.
+* LDAP admin: `https://localhost:1443`.
+* Keycloak: `https://<HOST_IP>:2443`.
+* Gitea: `https://<HOST_IP>:3443`.
+* Jenkins: `https://<HOST_IP>:4443`.
+* Gerrit: `https://<HOST_IP>:5443`.
+* Wiki: `https://<HOST_IP>:8443`. We need to access `http://<HOST_IP>:3000` for an initial setup.
