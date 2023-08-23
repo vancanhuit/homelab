@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.401.3-lts-jdk17
+FROM jenkins/jenkins:2.414.1-lts-jdk17
 
 COPY --chown=jenkins:jenkins certs/jenkins.jks /var/lib/jenkins/jenkins.jks
 
